@@ -1,21 +1,15 @@
-
 # Ex-1-NFA-to-DFA
 # Exercise 1 - Conversion of Non-Deterministic Finite Automaton (NFA) To Deterministic Finite Automaton (DFA)
-
 # Date: 30.04.2024
 ## Aim
 To write a C program for Conversion of Non-Deterministic Finite Automaton (NFA) To 
 Deterministic Finite Automaton (DFA).
 # ALGORITHM
 Step 1 : Take ∈ closure for the beginning state of NFA as beginning state of DFA. 
-
 Step 2 : Find the states that can be traversed from the present for each input symbol (union of 
 transition value and their closures for each states of NFA present in current state of DFA). 
-
 Step 3 : If any new state is found take it as current state and repeat step 2. 
-
 Step 4 : Do repeat Step 2 and Step 3 until no new state present in DFA transition table. 
-
 Step 5 : Mark the states of DFA which contains final state of NFA as final states of DFA.
 # PROGRAM
 ~~~
@@ -26,8 +20,6 @@ Step 5 : Mark the states of DFA which contains final state of NFA as final state
 char NFA_FILE[MAX_LEN];
 char buffer[MAX_LEN];
 int zz = 0;
-// Structure to store DFA states and their
-// status ( i.e new entry or already present)
 struct DFA {
  char *states;
  int count;
@@ -35,23 +27,9 @@ struct DFA {
 int last_index = 0;
 FILE *fp;
 int symbols;
-/* reset the hash map*/
-void reset(int ar[], int size) {
- int i;
- // reset all the values of
- // the mapping array to zero
- for (i = 0; i < size; i++) {
- ar[i] = 0;
- }
-}
 // Check which States are present in the e-closure
 /* map the states of NFA to a hash set*/
-void check(int ar[], char S[]) {
- int i, j;
- // To parse the individual states of NFA
- int len = strlen(S);
- for (i = 0; i < len; i++) {
- // Set hash map for the position
+// Set hash map for the position
  // of the states which is found
  j = ((int)(S[i]) - 65);
  ar[j]++;
@@ -60,15 +38,6 @@ void check(int ar[], char S[]) {
 // To find new Closure States
 void state(int ar[], int size, char S[]) {
  int j, k = 0;
- // Combine multiple states of NFA
- // to create new states of DFA
- for (j = 0; j < size; j++) {
- if (ar[j] != 0)
- S[k++] = (char)(65 + j);
- }
- // mark the end of the state
- S[k] = '\0';
-}
 // To pick the next closure from closure set
 int closure(int ar[], int size) {
  int i;
@@ -228,38 +197,18 @@ char *NFA_TABLE[states][symbols + 1];
  strcpy(&NFA_TABLE[1][1], "C");
  strcpy(&NFA_TABLE[1][2], "-");
  strcpy(&NFA_TABLE[2][0], "-");
- strcpy(&NFA_TABLE[2][1], "-");
- strcpy(&NFA_TABLE[2][2], "D");
- strcpy(&NFA_TABLE[3][0], "E");
- strcpy(&NFA_TABLE[3][1], "A");
- strcpy(&NFA_TABLE[3][2], "-");
- strcpy(&NFA_TABLE[4][0], "A");
- strcpy(&NFA_TABLE[4][1], "-");
  strcpy(&NFA_TABLE[4][2], "BF");
- strcpy(&NFA_TABLE[5][0], "-");
- strcpy(&NFA_TABLE[5][1], "-");
- strcpy(&NFA_TABLE[5][2], "-");
  printf("\n NFA STATE TRANSITION TABLE \n\n\n");
  printf("STATES\t");
  for (i = 0; i < symbols; i++)
  printf("|%d\t", i);
  printf("eps\n");
- // Displaying the matrix of NFA transition table
- printf("--------+------------------------------------\n");
- for (i = 0; i < states; i++) {
- printf("%c\t", (char)(65 + i));
- for (j = 0; j <= symbols; j++) {
- printf("|%s \t", &NFA_TABLE[i][j]);
- }
+ 
  printf("\n");
  }
  int closure_ar[states];
  char *closure_table[states];
  Display_closure(states, closure_ar, closure_table, NFA_TABLE, DFA_TABLE);
- strcpy(&dfa_states[last_index++].states, "-");
- dfa_states[last_index - 1].count = 1;
- bzero((void *)buffer, MAX_LEN);
- strcpy(buffer, &closure_table[0]);
  strcpy(&dfa_states[last_index++].states, buffer);
  int Sm = 1, ind = 1;
  int start_index = 1;
@@ -268,15 +217,6 @@ char *NFA_TABLE[states][symbols + 1];
  while (ind != -1) {
  dfa_states[start_index].count = 1;
  Sm = 0;
- for (i = 0; i < symbols; i++) {
- trans(buffer, i, closure_table, states, NFA_TABLE, T_buf);
- // storing the new DFA state in buffer
- strcpy(&DFA_TABLE[zz][i], T_buf);
- // parameter to control new states
- Sm = Sm + new_states(dfa_states, T_buf);
- }
- ind = indexing(dfa_states);
- if (ind != -1)
  strcpy(buffer, &dfa_states[++start_index].states);
  zz++;
  }

@@ -30,10 +30,7 @@ struct DFA {
 int last_index = 0;
 FILE *fp;
 int symbols;
-// Check which States are present in the e-closure
-/* map the states of NFA to a hash set*/
-// Set hash map for the position
- // of the states which is found
+// of the states which is found
  j = ((int)(S[i]) - 65);
  ar[j]++;
  }
@@ -63,9 +60,6 @@ int indexing(struct DFA *dfa) {
 }
 /* To Display epsilon closure*/
 void Display_closure(int states, int closure_ar[],
- char *closure_table[],
- char *NFA_TABLE[][symbols + 1],
- char *DFA_TABLE[][symbols]) {
  int i;
  for (i = 0; i < states; i++) {
  reset(closure_ar, states);
@@ -101,7 +95,6 @@ int new_states(struct DFA *dfa, char S[]) {
  dfa[last_index - 1].count = 0;
  return 1;
 }
-// Transition function from NFA to DFA
 // (generally union of closure operation )
 void trans(char S[], int M, char *clsr_t[], int st,char *NFT[][symbols + 1], char TB[]) {
  int len = strlen(S);
